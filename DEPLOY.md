@@ -1,5 +1,13 @@
 # Configuração para deploy em produção (Render, Vercel, Netlify, etc)
 
+## ⚠️ CRÍTICO - Erro 404 ao acessar /login
+
+Se você está recebendo **404** ao acessar rotas como `/login` ou `/superadmin`, é porque o servidor **não está configurado para SPA routing**.
+
+Este projeto usa **React Router** - todas as rotas (`/login`, `/superadmin`) são gerenciadas no cliente. O servidor DEVE redirecionar TODAS as rotas para `index.html`.
+
+---
+
 ## Para Render.com
 
 Crie um arquivo `render.yaml` na raiz do projeto ou configure manualmente:

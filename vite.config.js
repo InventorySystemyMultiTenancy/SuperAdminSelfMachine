@@ -20,4 +20,9 @@ export default defineConfig({
   preview: {
     port: 4173,
   },
+  // Build config para garantir que funcione em produção
+  build: {
+    outDir: "dist",
+    sourcemap: false,
+  },
 });
