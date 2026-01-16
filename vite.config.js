@@ -10,9 +10,9 @@ export default defineConfig({
     // Proxy para redirecionar chamadas /api para o backend
     proxy: {
       "/api": {
-        target: process.env.VITE_API_URL || "http://localhost:3001/api",
+        target: "http://localhost:3001",
         changeOrigin: true,
-        rewrite: (path) => path.replace(/^\/api/, ""),
+        secure: false,
       },
     },
   },
