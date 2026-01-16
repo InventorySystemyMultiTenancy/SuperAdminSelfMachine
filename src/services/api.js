@@ -2,7 +2,9 @@ import axios from "axios";
 
 // Cria uma instância do axios com configuração base
 const api = axios.create({
-  baseURL: import.meta.env.VITE_API_URL || "https://toylandbackend.onrender.com/api",
+  // Em desenvolvimento (sem VITE_API_URL), usa /api (proxy do Vite redireciona para backend)
+  // Em produção, use a URL completa configurada no .env
+  baseURL: import.meta.env.VITE_API_URL || "/api",
   timeout: 15000,
   headers: {
     "Content-Type": "application/json",
