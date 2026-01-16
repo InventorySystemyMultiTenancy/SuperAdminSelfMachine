@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 // Importa a lógica que criamos acima
-import { useDashboardData } from "./hooks/useDashboardData";
+import { useDashboardData } from "../hooks/useDashboardData";
 
 // Seus componentes existentes
 import EmpresasTable from "../components/EmpresasTable";
