@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 
-const EmpresasTable = ({ empresas, onSelectEmpresa }) => {
+const EmpresasTable = ({ empresas }) => {
   const [busca, setBusca] = useState("");
   const [pagina, setPagina] = useState(1);
   const itensPorPagina = 10;
@@ -8,12 +8,12 @@ const EmpresasTable = ({ empresas, onSelectEmpresa }) => {
   const empresasFiltradas = empresas.filter(
     (e) =>
       e.nome?.toLowerCase().includes(busca.toLowerCase()) ||
-      e.cnpj?.replace(/\D/g, "").includes(busca.replace(/\D/g, ""))
+      e.cnpj?.replace(/\D/g, "").includes(busca.replace(/\D/g, "")),
   );
   const totalPaginas = Math.ceil(empresasFiltradas.length / itensPorPagina);
   const empresasPagina = empresasFiltradas.slice(
     (pagina - 1) * itensPorPagina,
-    pagina * itensPorPagina
+    pagina * itensPorPagina,
   );
 
   return (
@@ -39,7 +39,6 @@ const EmpresasTable = ({ empresas, onSelectEmpresa }) => {
               <th className="px-3 py-2 text-left">Status</th>
               <th className="px-3 py-2 text-left">Data Criação</th>
               <th className="px-3 py-2 text-left">Data Atualização</th>
-              <th className="px-3 py-2 text-left">Ações</th>
             </tr>
           </thead>
           <tbody>
@@ -68,14 +67,6 @@ const EmpresasTable = ({ empresas, onSelectEmpresa }) => {
                 </td>
                 <td className="px-3 py-2">{empresa.dataCriacao}</td>
                 <td className="px-3 py-2">{empresa.dataAtualizacao}</td>
-                <td className="px-3 py-2">
-                  <button
-                    onClick={() => onSelectEmpresa(empresa)}
-                    className="bg-blue-600 text-white px-3 py-1 rounded hover:bg-blue-700 transition text-xs"
-                  >
-                    Detalhes
-                  </button>
-                </td>
               </tr>
             ))}
           </tbody>

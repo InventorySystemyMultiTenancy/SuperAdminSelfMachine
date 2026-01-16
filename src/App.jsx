@@ -5,7 +5,7 @@ import {
   Route,
   Navigate,
 } from "react-router-dom";
-import SuperAdminPage from "./components/SuperAdminPage";
+import SuperAdminPage from "./pages/SuperAdminPage";
 import Login from "./components/Login";
 import { AuthProvider, useAuth } from "./contexts/AuthContext";
 

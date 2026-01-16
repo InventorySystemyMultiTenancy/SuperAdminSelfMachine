@@ -1,16 +1,104 @@
-# React + Vite
+# Super Admin Inventory System - Frontend
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+Sistema de painel administrativo para gerenciamento multi-tenant de inventário.
 
-Currently, two official plugins are available:
+## 🚀 Configuração
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) (or [oxc](https://oxc.rs) when used in [rolldown-vite](https://vite.dev/guide/rolldown)) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+### 1. Instalar dependências
 
-## React Compiler
+```bash
+npm install
+```
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+### 2. Configurar variáveis de ambiente
 
-## Expanding the ESLint configuration
+Crie um arquivo `.env` na raiz do projeto baseado no `.env.example`:
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+```bash
+cp .env.example .env
+```
+
+Edite o arquivo `.env` e configure a URL do backend:
+
+```
+VITE_API_URL=http://localhost:3001/api
+```
+
+### 3. Executar em desenvolvimento
+
+```bash
+npm run dev
+```
+
+## 📁 Estrutura do Projeto
+
+```
+src/
+├── services/
+│   └── api.js              # Configuração centralizada do Axios
+├── contexts/
+│   └── AuthContext.jsx     # Context de autenticação
+├── hooks/
+│   └── useDashboardData.js # Hook para gerenciar dados do dashboard
+├── pages/
+│   └── SuperAdminPage.jsx  # Página principal do super admin
+├── components/
+│   ├── Login.jsx           # Componente de login
+│   ├── EmpresasTable.jsx   # Tabela de empresas
+│   ├── LojasTable.jsx      # Tabela de lojas
+│   ├── UsuariosTable.jsx   # Tabela de usuários
+│   └── ...                 # Outros componentes
+└── App.jsx                 # Componente principal
+```
+
+## 🔗 Conexão com Backend
+
+Todas as chamadas HTTP são feitas através da instância centralizada do Axios em `src/services/api.js`.
+
+### Endpoints utilizados:
+
+- `POST /auth/login` - Login de usuário
+- `GET /superadmin/empresas` - Listar empresas
+- `POST /superadmin/empresas` - Criar empresa
+- `PUT /superadmin/empresas/:id` - Atualizar empresa
+- `DELETE /superadmin/empresas/:id` - Deletar empresa
+- `PATCH /superadmin/empresas/:id/plano` - Atualizar plano
+- `PATCH /superadmin/empresas/:id/ativo` - Ativar/desativar empresa
+- `GET /lojas` - Listar lojas
+- `POST /lojas` - Criar loja
+- `PUT /lojas/:id` - Atualizar loja
+- `DELETE /lojas/:id` - Deletar loja
+- `GET /usuarios` - Listar usuários
+- `POST /usuarios` - Criar usuário
+- `PUT /usuarios/:id` - Atualizar usuário
+- `DELETE /usuarios/:id` - Deletar usuário
+
+### Autenticação
+
+O sistema usa JWT (JSON Web Token) para autenticação:
+
+- O token é armazenado no `localStorage` após login
+- É automaticamente incluído em todas as requisições via interceptor do Axios
+- Em caso de 401 (não autorizado), redireciona para a tela de login
+
+## 🛠️ Scripts Disponíveis
+
+```bash
+npm run dev      # Inicia servidor de desenvolvimento
+npm run build    # Gera build de produção
+npm run preview  # Visualiza build de produção localmente
+```
+
+## ⚙️ Tecnologias
+
+- **React** - Biblioteca UI
+- **React Router** - Roteamento
+- **Axios** - Cliente HTTP
+- **Tailwind CSS** - Estilização
+- **Vite** - Build tool
+
+## 📝 Notas Importantes
+
+- **Super Admin Only**: Apenas usuários com role `SUPER_ADMIN` podem acessar o sistema
+- **URL do Backend**: Configure corretamente no arquivo `.env`
+- **Token JWT**: Armazenado no localStorage e incluído automaticamente em requisições

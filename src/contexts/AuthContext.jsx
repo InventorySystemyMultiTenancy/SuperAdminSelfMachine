@@ -1,5 +1,10 @@
-import React, { createContext, useState, useContext, useEffect } from "react";
-import axios from "axios";
+import React, {
+  createContext,
+  useState,
+  useContext,
+  useEffect,
+  useMemo,
+} from "react";
 
 const AuthContext = createContext({
   user: null,
@@ -23,47 +28,51 @@ export const AuthProvider = ({ children }) => {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    // Verifica se há um usuário salvo no localStorage ao carregar
-    const token = localStorage.getItem("token");
-    const usuarioSalvo = localStorage.getItem("usuario");
+    const loadUserFromStorage = () => {
+      const token = localStorage.getItem("token");
+      const usuarioSalvo = localStorage.getItem("usuario");
 
-    if (token && usuarioSalvo) {
-      try {
-        const usuario = JSON.parse(usuarioSalvo);
-        setUser(usuario);
-
-        // Configura o token padrão do axios
-        axios.defaults.headers.common["Authorization"] = `Bearer ${token}`;
-      } catch (error) {
-        console.error("Erro ao carregar usuário do localStorage:", error);
-        localStorage.removeItem("token");
-        localStorage.removeItem("usuario");
+      if (token && usuarioSalvo) {
+        try {
+          const usuario = JSON.parse(usuarioSalvo);
+          setUser(usuario);
+        } catch (error) {
+          console.error("Erro ao processar dados do localStorage:", error);
+          localStorage.removeItem("token");
+          localStorage.removeItem("usuario");
+        }
       }
-    }
+      setLoading(false);
+    };
 
-    setLoading(false);
+    loadUserFromStorage();
   }, []);
 
-  const login = (usuario) => {
+  const login = (usuario, token) => {
     setUser(usuario);
     localStorage.setItem("usuario", JSON.stringify(usuario));
+    localStorage.setItem("token", token);
   };
 
   const logout = () => {
     setUser(null);
     localStorage.removeItem("token");
     localStorage.removeItem("usuario");
-    delete axios.defaults.headers.common["Authorization"];
+    window.location.href = "/login";
   };
 
-  const value = {
-    user,
-    loading,
-    login,
-    logout,
-    isAuthenticated: !!user,
-    isSuperAdmin: user?.role === "SUPER_ADMIN",
-  };
+  // Performance: Memoize the value to prevent unnecessary re-renders
+  const value = useMemo(
+    () => ({
+      user,
+      loading,
+      login,
+      logout,
+      isAuthenticated: !!user,
+      isSuperAdmin: user?.role === "SUPER_ADMIN",
+    }),
+    [user, loading],
+  );
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
 };

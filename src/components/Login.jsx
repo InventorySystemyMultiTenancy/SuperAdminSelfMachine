@@ -1,8 +1,9 @@
 import React, { useState } from "react";
-import axios from "axios";
 import { useNavigate } from "react-router-dom";
+import { useAuth } from "../contexts/AuthContext";
+import api from "../services/api";
 
-const Login = ({ onLoginSuccess }) => {
+const Login = () => {
   const [formData, setFormData] = useState({
     email: "",
     senha: "",
@@ -10,6 +11,7 @@ const Login = ({ onLoginSuccess }) => {
   const [loading, setLoading] = useState(false);
   const [erro, setErro] = useState("");
   const navigate = useNavigate();
+  const { login } = useAuth();
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -25,30 +27,20 @@ const Login = ({ onLoginSuccess }) => {
     setLoading(true);
 
     try {
-      const response = await axios.post("/api/auth/login", {
+      const response = await api.post("/auth/login", {
         ...formData,
-        subdomain: "superadminpage", // Indica que é login do super admin
+        subdomain: "superadminpage",
       });
 
       const { token, usuario } = response.data;
 
-      // Verifica se o usuário é SUPER_ADMIN
       if (usuario.role !== "SUPER_ADMIN") {
         setErro("Acesso negado. Apenas SUPER_ADMIN pode acessar esta área.");
         setLoading(false);
         return;
       }
 
-      // Salva o token e dados do usuário
-      localStorage.setItem("token", token);
-      localStorage.setItem("usuario", JSON.stringify(usuario));
-
-      // Notifica o componente pai sobre o login bem-sucedido
-      if (onLoginSuccess) {
-        onLoginSuccess(usuario);
-      }
-
-      // Redireciona para a página de super admin
+      login(usuario, token);
       navigate("/superadmin");
     } catch (error) {
       console.error("Erro no login:", error);
