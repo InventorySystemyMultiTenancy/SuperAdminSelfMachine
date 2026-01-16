@@ -44,8 +44,15 @@ const Login = () => {
       navigate("/superadmin");
     } catch (error) {
       console.error("Erro no login:", error);
+      console.error("Detalhes:", {
+        url: error.config?.url,
+        baseURL: error.config?.baseURL,
+        status: error.response?.status,
+        data: error.response?.data,
+      });
       setErro(
         error.response?.data?.error ||
+          error.response?.data?.message ||
           "Erro ao realizar login. Verifique suas credenciais.",
       );
     } finally {
