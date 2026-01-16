@@ -292,7 +292,7 @@ const CriarEmpresa = ({ onEmpresaCriada, onCancelar }) => {
         </div>
       </form>
 
-      <style jsx>{`
+      <style>{`
         .criar-empresa-container {
           max-width: 800px;
           margin: 0 auto;
