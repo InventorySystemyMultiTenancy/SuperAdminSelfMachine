@@ -5,11 +5,12 @@ const FormUsuario = ({ usuario, onSubmit, empresas, onCancel }) => {
   const [email, setEmail] = React.useState(usuario?.email || "");
   const [empresaId, setEmpresaId] = React.useState(usuario?.empresaId || "");
   const [role, setRole] = React.useState(usuario?.role || "USER");
+  const [senha, setSenha] = React.useState("");
 
   function handleSubmit(e) {
     e.preventDefault();
-    if (!nome || !email || !empresaId) return;
-    onSubmit({ ...usuario, nome, email, empresaId, role });
+    if (!nome || !email || !empresaId || !senha) return;
+    onSubmit({ ...usuario, nome, email, empresaId, role, senha });
   }
 
   return (
@@ -48,6 +49,16 @@ const FormUsuario = ({ usuario, onSubmit, empresas, onCancel }) => {
             </option>
           ))}
         </select>
+      </div>
+      <div>
+        <label className="block font-medium mb-1">Senha:</label>
+        <input
+          type="password"
+          value={senha}
+          onChange={(e) => setSenha(e.target.value)}
+          required
+          className="w-full px-3 py-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-blue-400"
+        />
       </div>
       <div>
         <label className="block font-medium mb-1">Papel:</label>
