@@ -8,6 +8,7 @@ import LojasTable from "../components/LojasTable";
 import UsuariosTable from "../components/UsuariosTable";
 import FormLoja from "../components/FormLoja";
 import FormUsuario from "../components/FormUsuario";
+import FormEmpresa from "../components/FormEmpresa"; // Importe o FormEmpresa
 // import EmpresaDetailsModal from "./EmpresaDetailsModal"; // Descomente se tiver
 
 function SuperAdminPage() {
@@ -29,6 +30,7 @@ function SuperAdminPage() {
 
   const [formLoja, setFormLoja] = useState(null);
   const [formUsuario, setFormUsuario] = useState(null);
+  const [formEmpresa, setFormEmpresa] = useState(null); // Estado para o formulário de empresa
 
   // Wrappers simples para conectar o clique do botão com a ação da API
   const handleSaveLoja = async (loja) => {
@@ -51,6 +53,11 @@ function SuperAdminPage() {
     if (window.confirm(`Excluir usuário ${usuario.nome}?`)) {
       actions.deleteUsuario(usuario.id);
     }
+  };
+
+  const handleSaveEmpresa = async (empresa) => {
+    const ok = await actions.saveEmpresa(empresa);
+    if (ok) setFormEmpresa(null);
   };
 
   if (loading)
@@ -92,6 +99,16 @@ function SuperAdminPage() {
         <button
           onClick={() => {
             actions.clearMessages();
+            setFormEmpresa({ empresa: {}, modo: "create" });
+          }}
+          className="bg-indigo-600 text-white px-4 py-2 rounded hover:bg-indigo-700 transition"
+          disabled={operationLoading}
+        >
+          Nova Empresa
+        </button>
+        <button
+          onClick={() => {
+            actions.clearMessages();
             setFormLoja({ loja: {}, modo: "create" });
           }}
           className="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700 transition"
@@ -112,6 +129,22 @@ function SuperAdminPage() {
       </div>
 
       {/* Formulários (Aparecem condicionalmente) */}
+      {formEmpresa && (
+        <div className="bg-white border border-gray-200 rounded shadow p-4 mb-6">
+          <h3 className="font-bold mb-2">
+            {formEmpresa.modo === "create" ? "Nova Empresa" : "Editar Empresa"}
+          </h3>
+          <FormEmpresa
+            empresa={formEmpresa.empresa}
+            onSubmit={async (empresa) => {
+              if (!empresa) return setFormEmpresa(null);
+              const ok = await actions.saveEmpresa(empresa);
+              if (ok) setFormEmpresa(null);
+            }}
+          />
+        </div>
+      )}
+
       {formLoja && (
         <div className="bg-white border border-gray-200 rounded shadow p-4 mb-6">
           <h3 className="font-bold mb-2">
