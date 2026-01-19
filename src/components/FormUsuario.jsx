@@ -4,7 +4,7 @@ const FormUsuario = ({ usuario, onSubmit, empresas, onCancel }) => {
   const [nome, setNome] = React.useState(usuario?.nome || "");
   const [email, setEmail] = React.useState(usuario?.email || "");
   const [empresaId, setEmpresaId] = React.useState(usuario?.empresaId || "");
-  const [role, setRole] = React.useState(usuario?.role || "USER");
+  const [role, setRole] = React.useState(usuario?.role || "FUNCIONARIO");
   const [senha, setSenha] = React.useState("");
 
   function handleSubmit(e) {
@@ -68,7 +68,7 @@ const FormUsuario = ({ usuario, onSubmit, empresas, onCancel }) => {
           required
           className="w-full px-3 py-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-blue-400"
         >
-          <option value="USER">Usuário</option>
+          <option value="FUNCIONARIO">Funcionário</option>
           <option value="ADMIN">Admin</option>
         </select>
       </div>
